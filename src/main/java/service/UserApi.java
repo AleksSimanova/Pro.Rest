@@ -1,12 +1,13 @@
 package service;
+
+import static io.restassured.RestAssured.given;
+
 import dio.AunthenUserDTO;
 import dio.UserDTO;
 import dio.UserNotValidDTO;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
-
-import static io.restassured.RestAssured.given;
 
 public class UserApi {
 
@@ -44,7 +45,7 @@ public class UserApi {
     }
     public ValidatableResponse createUserNotValid(UserNotValidDTO userNotValidDTO) {
         return given(spec)
-                    .basePath(USER_PATH)
+                .basePath(USER_PATH)
                     .body(userNotValidDTO)
                 .when()
                     .post()
@@ -52,27 +53,17 @@ public class UserApi {
                     .log().all();
     }
 
-    public ValidatableResponse updateUserWithoutAuthorization(String nameWithoutAuth, UserDTO userDTOWithoutAuth) {
-        return given(spec)
-                    .basePath(USER_PATH + "/" + nameWithoutAuth)
-                    .body(userDTOWithoutAuth)
-                .when()
-                    .put()
-                .then()
-                    .log().all();
-
-    }
     public ValidatableResponse updateUser(String name, UserDTO userDTO,String session) {
         return given(spec)
-//                .header("Authorization",session)
+                .header("Authorization",session)
                 .basePath(USER_PATH + "/" + name)
                 .body(userDTO)
                 .when()
                 .put()
                 .then()
                 .log().all();
-
     }
+
     public ValidatableResponse deleteUser(String name) {
         return given(spec)
                     .basePath(USER_PATH + "/" + name)

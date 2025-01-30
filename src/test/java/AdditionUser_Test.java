@@ -1,3 +1,5 @@
+import static org.hamcrest.Matchers.*;
+
 import dio.AunthenUserDTO;
 import dio.ResponseGetUserDTO;
 import dio.UserDTO;
@@ -7,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import service.UserApi;
 import supportive.SplitLine;
 import supportive.TextRandom;
-
-import static org.hamcrest.Matchers.*;
 
 public class AdditionUser_Test {
     private UserApi petStoreApi = new UserApi();

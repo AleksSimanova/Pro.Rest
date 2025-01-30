@@ -1,3 +1,5 @@
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.lessThan;
 
 import dio.UserDTO;
 import dio.UserNotValidDTO;
@@ -7,9 +9,6 @@ import io.restassured.module.jsv.JsonSchemaValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.UserApi;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.lessThan;
 
 public class CreateUser_Test {
     private UserApi petStoreApi = new UserApi();
@@ -28,7 +27,6 @@ public class CreateUser_Test {
                 .firstName("firstName")
                 .username(userName)
                 .build();
-//        if (petStoreApi.getUserForName(userName).extract().body().jsonPath().get("message").equals("User not found")) {
             petStoreApi.createUser(user1)
                     .statusCode(200)
                     .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/userCreate.json"))
@@ -42,12 +40,10 @@ public class CreateUser_Test {
             petStoreApi.getUserForName(userName)
                     .statusCode(200);
 
- //       }else {new InpossibleCreatUserException("user already exists");}
     }
-
+    //передача невалидногго json не соответсвуующего твобования для создания объекта. проверка что user не создается
     @Test
     public void checkNotCreateUser() {
-//передача невалидногго json не соответсвуующего твобования для создания объекта. проверка что user не создается
         String userName = "Name123noValid";
         UserNotValidDTO userNotValid = UserNotValidDTO.builder()
                 .usernameNotValid(userName)
@@ -71,6 +67,5 @@ public class CreateUser_Test {
                 .body("type", equalTo("error"))
                 .body("message", equalTo("User not found"));
     }
-
 }
 

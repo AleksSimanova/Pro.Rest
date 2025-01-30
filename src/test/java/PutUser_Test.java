@@ -1,3 +1,5 @@
+import static org.hamcrest.Matchers.*;
+
 import dio.AunthenUserDTO;
 import dio.UserDTO;
 import io.restassured.module.jsv.JsonSchemaValidator;
@@ -5,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import service.UserApi;
 import supportive.SplitLine;
 import supportive.TextRandom;
-
-import static org.hamcrest.Matchers.*;
 
 public class PutUser_Test {
 
@@ -27,6 +27,7 @@ public class PutUser_Test {
                 .username(nameOld)
                 .password(nameOld)
                 .build();
+
         String newName = TextRandom.generateString(5);
         UserDTO newUserDTO = UserDTO.builder()
                 .phone("num")
@@ -34,18 +35,23 @@ public class PutUser_Test {
                 .firstName("newName")
                 .username(newName)
                 .build();
+
         petStoreApi.createUser(userOLd)
                 .statusCode(200)
                 .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/userCreate.json"))
                 .time(lessThan(5000L));
-        petStoreApi.getUserForName(nameOld).
-                statusCode(200)
+
+        petStoreApi.getUserForName(nameOld)
+                        .statusCode(200)
                 .body("username", equalTo(nameOld));
+
         petStoreApi.authentication(autorizUser)
                 .statusCode(200);
+
         String sessionMessage = petStoreApi.authentication(autorizUser)
                 .extract().body().jsonPath().get("message");
         String session = SplitLine.getSession(sessionMessage);
+
         petStoreApi.updateUser(nameOld, newUserDTO, session)
                 .statusCode(200)
                 .body("type", equalTo("unknown"))
@@ -53,7 +59,4 @@ public class PutUser_Test {
         petStoreApi.getUserForName(newName).statusCode(200);
 
     }
-
-
-
 }
