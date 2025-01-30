@@ -46,7 +46,7 @@ public class CreateUser_Test {
     }
 
     @Test
-    public void chechNotCreateUser() {
+    public void checkNotCreateUser() {
 //передача невалидногго json не соответсвуующего твобования для создания объекта. проверка что user не создается
         String userName = "Name123noValid";
         UserNotValidDTO userNotValid = UserNotValidDTO.builder()
